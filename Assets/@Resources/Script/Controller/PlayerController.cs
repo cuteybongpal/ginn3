@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.EventSystems;
 using static UnityEngine.ParticleSystem;
 
 public class PlayerController : MonoBehaviour
@@ -46,7 +47,7 @@ public class PlayerController : MonoBehaviour
     {
         rb = GetComponent<Rigidbody>();
         anim = GetComponent<Animator>();
-        particle = GetComponent<ParticleSystem>();
+        particle = GetComponentInChildren<ParticleSystem>();
         AttackCollider.enabled = false;
     }
     void Update()
@@ -76,7 +77,8 @@ public class PlayerController : MonoBehaviour
         }
         if (Input.GetMouseButtonDown(0))
         {
-            State = PlayerState.Attack;
+            if (!EventSystem.current.IsPointerOverGameObject())
+                State = PlayerState.Attack;
         }
         rb.velocity = new Vector3(0,rb.velocity.y,0) + dir.normalized * GameManager.Instance.PlayerSpeed;
         if (dir == Vector3.zero)

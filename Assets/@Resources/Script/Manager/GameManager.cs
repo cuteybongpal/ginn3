@@ -2,6 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using System.Runtime.InteropServices;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 
 public class GameManager : MonoBehaviour
 {
@@ -14,6 +15,7 @@ public class GameManager : MonoBehaviour
     public int PlayerMaxO2;
     int playerCurrentHp;
     int playerCurrentO2;
+    int currentMoney;
 
     public List<IStorable> Inventory = new List<IStorable>();
     public int MaxStroableItemCount = 4;
@@ -56,7 +58,29 @@ public class GameManager : MonoBehaviour
             ui.SetO2(playerCurrentO2);
         }
     }
+    public int CurrentMoney
+    {
+        get { return currentMoney; }
+        set
+        {
+            currentMoney = value;
+            UI_Lobby ui = UIManager.Instance.GetCurrentMainUI<UI_Lobby>();
+            if (ui == null)
+                return;
+            ui.SetCoin(currentMoney);
+        }
+    }
 
+    Define.Scenes currentScene = Define.Scenes.Lobby;
+    public Define.Scenes CurrentScene
+    {
+        get { return currentScene; }
+        set 
+        {
+            currentScene = value;
+            SceneManager.LoadSceneAsync((int)currentScene);
+        }
+    }
     private void Awake()
     {
         if (instance == null)
