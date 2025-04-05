@@ -12,6 +12,8 @@ public class TreasureChest : MonoBehaviour
     {
         anim = GetComponent<Animator>();
         treasure = GetComponent<Treasure>();
+        if (GameManager.Instance.TreasureIsFind[(int)GameManager.Instance.CurrentScene - 2][treasure.TreasureNum])
+            treasure = null;
     }
 
     private void OnTriggerEnter(Collider other)

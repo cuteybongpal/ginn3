@@ -12,6 +12,8 @@ public class ProductManager : MonoBehaviour
     public int[] Lvs;
     public Sprite[] ProductSprites;
     public int[] MaxLvs;
+    public int[] Prices;
+    public GameObject UI_Warning;
 
     private void Awake()
     {
@@ -26,9 +28,33 @@ public class ProductManager : MonoBehaviour
         }
     }
 
-    public void UpGrade(int ProductNum)
+    public bool UpGrade(int productNum)
     {
-
+        if (GameManager.Instance.CurrentMoney < Prices[productNum])
+        {
+            Instantiate(UI_Warning).GetComponent<UI_Warning>().Init("돈이 부족해 업그레이드가 불가능합니다.");
+            return false;
+        }
+        GameManager.Instance.CurrentMoney -= Prices[productNum];
+        switch(productNum)
+        {
+            case 0:
+                GameManager.Instance.PlayerMaxO2 += 50;
+                Prices[productNum] += 200;
+                break;
+            case 1:
+                GameManager.Instance.MaxStroableItemCount += 2;
+                GameManager.Instance.MaxStroableItemWeight += 50;
+                Prices[productNum] += 200;
+                break;
+            case 2:
+                GameManager.Instance.PlayerAttack++;
+                Prices[productNum] += 300;
+                break;
+        }
+        if (Prices[productNum] <= 500)
+            Prices[productNum] = 0;
+        return true;
     }
 
 }

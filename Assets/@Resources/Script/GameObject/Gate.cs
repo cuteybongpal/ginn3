@@ -13,6 +13,6 @@ public class Gate : MonoBehaviour
             return;
 
         UI_SceneConfirm ui = Instantiate(UI_SceneMoveConfirm).GetComponent<UI_SceneConfirm>();
-        ui.Initialized(MoveText, DestScene);
+        ui.Initialize(MoveText, DestScene);
     }
 }

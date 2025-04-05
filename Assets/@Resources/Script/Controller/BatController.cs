@@ -50,6 +50,6 @@ public class BatController : MonoBehaviour
     {
         if (!other.CompareTag("Attack"))
             return;
-        CurrentHp--;
+        CurrentHp -= GameManager.Instance.PlayerAttack;
     }
 }

@@ -20,6 +20,8 @@ public class GameManager : MonoBehaviour
     public List<IStorable> Inventory = new List<IStorable>();
     public int MaxStroableItemCount = 4;
     public int MaxStroableItemWeight = 200;
+    public int PlayerAttack = 1;
+    public List<bool>[] TreasureIsFind;
     public int PlayerCurrentHp
     {
         get { return playerCurrentHp; }
@@ -35,6 +37,7 @@ public class GameManager : MonoBehaviour
             if (playerCurrentHp <= 0)
             {
                 playerCurrentHp = 0;
+                GameOver();
             }
         }
     }
@@ -77,6 +80,10 @@ public class GameManager : MonoBehaviour
         get { return currentScene; }
         set 
         {
+            if (currentScene == Define.Scenes.Lobby && value == Define.Scenes.Stage1)
+                GameStart();
+            else if (currentScene == Define.Scenes.Stage1 && value == Define.Scenes.Lobby)
+                RoundOver();
             currentScene = value;
             SceneManager.LoadSceneAsync((int)currentScene);
         }
@@ -94,8 +101,6 @@ public class GameManager : MonoBehaviour
             Destroy(gameObject);
         }
     }
-
-
     public bool AddItemToInventory(IStorable storable)
     {
         if (Inventory.Count >= MaxStroableItemCount)
@@ -133,11 +138,37 @@ public class GameManager : MonoBehaviour
         UIManager.Instance.GetCurrentMainUI<UI_Player>().RefreshInventory();
         return true;
     }
-
+    public void RemoveAllInventoryItem()
+    {
+        foreach(var item in Inventory)
+        {
+            if (item is Treasure)
+            {
+                Treasure t = (Treasure)item;
+                Destroy(t.gameObject);
+            }
+            else
+            {
+                Item item1 = (Item)item;
+                Destroy(item1.gameObject);
+            }
+        }
+        Inventory.Clear();
+    }
     public void GameStart()
     {
         PlayerCurrentHp = PlayerMaxHp;
         PlayerCurrentO2 = PlayerMaxO2;
+
+        TreasureIsFind = new List<bool>[DataManager.IsTreasureFind.Length];
+        for (int i = 0; i < DataManager.IsTreasureFind.Length; i++)
+        {
+            TreasureIsFind[i] = new List<bool>();
+            foreach(bool tFind in DataManager.IsTreasureFind[i])
+            {
+                TreasureIsFind[i].Add(tFind);
+            }
+        }
     }
     public void GameOver()
     {
@@ -155,6 +186,18 @@ public class GameManager : MonoBehaviour
                 Inventory.RemoveAt(i);
                 Item t = st as Item;
                 Destroy(t.gameObject);
+            }
+        }
+    }
+    public void RoundOver()
+    {
+        for (int i = 0; i < TreasureIsFind.Length; i++)
+        {
+            DataManager.Instance.isTreasureFind[i] = new List<bool>();
+            foreach (bool tFind in TreasureIsFind[i])
+            {
+                DataManager.Instance.isTreasureFind[i].Add(tFind);
+                Debug.Log($"{i}, {tFind}");
             }
         }
     }

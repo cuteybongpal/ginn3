@@ -8,12 +8,16 @@ public class Treasure : MonoBehaviour, IStorable
     public string Name;
     public int Weight;
     public int Worth;
+    public int TreasureNum;
     public int GetWeight {  get { return Weight; } }
     public Sprite GetSprite { get { return Sprite; } }
     public void Store()
     {
         if (GameManager.Instance.AddItemToInventory(this))
+        {
             Destroy(this);
+            GameManager.Instance.TreasureIsFind[(int)GameManager.Instance.CurrentScene - 2][TreasureNum] = true;
+        }
     }
 
     public virtual object Clone()

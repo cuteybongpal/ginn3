@@ -27,6 +27,10 @@ public class UIManager : MonoBehaviour
     {
         return currentMainUI as T;
     }
+    public T GetCurrentPopup<T>() where T : UI_Popup
+    {
+        return ui_popup.Pop() as T;
+    }
     public void Push(UI_Popup popup)
     {
         ui_popup.Push(popup);

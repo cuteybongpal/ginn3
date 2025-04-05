@@ -6,8 +6,8 @@ public class DataManager
 {
     static DataManager instance = new DataManager();
     public static DataManager Instance { get { return instance; } }
-    public static List<bool>[] IsTreasureFind { get { return instance.isTreasureFind; } }
-    List<bool>[] isTreasureFind = new List<bool>[5]
+    public static List<bool>[] IsTreasureFind { get { return instance.isTreasureFind; } set { IsTreasureFind = value; } }
+    public List<bool>[] isTreasureFind = new List<bool>[5]
     {
         new List<bool>()
         {

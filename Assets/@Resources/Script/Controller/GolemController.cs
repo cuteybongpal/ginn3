@@ -91,7 +91,7 @@ public class GolemController : MonoBehaviour
     {
         if (!other.CompareTag("Attack"))
             return;
-        CurrentHp--;
+        CurrentHp -= GameManager.Instance.PlayerAttack;
         Audios[0].Play();
         Particles[0].Play();
     }

@@ -8,8 +8,9 @@ public class UI_SceneConfirm : UI_Popup
     public Text Message;
     public Button Move;
     public Button Close;
-    public void Initialized(string message, Define.Scenes scenes)
+    public void Initialize(string message, Define.Scenes scenes)
     {
+        Init();
         Message.text = message;
         Move.onClick.AddListener(() =>
         {
