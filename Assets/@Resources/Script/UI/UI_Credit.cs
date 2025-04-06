@@ -6,6 +6,7 @@ using UnityEngine.UI;
 public class UI_Credit : UI_Base
 {
     public Text ScoreText;
+    public GameObject Image;
     private void Start()
     {
         Init();
@@ -18,17 +19,18 @@ public class UI_Credit : UI_Base
         float elapsedTime = 0;
         float duration = 5;
 
-        Vector3 origin = transform.position;
-        Vector3 destPos = origin + Vector3.up * 500;
+        Vector3 origin = Image.gameObject.transform.position;
+        Vector3 destPos = origin + Vector3.up * 1000;
         while (elapsedTime < duration)
         {
             Vector3 pos = Vector3.Lerp(origin, destPos, elapsedTime / duration);
+            Image.gameObject.transform.position = pos;
             yield return null;
             elapsedTime += Time.deltaTime;
         }
 
         while (!Input.GetKeyDown(KeyCode.Mouse0))
-            ;
+            yield return null;
         GameManager.Instance.CurrentScene = Define.Scenes.StartScene;
     }
 

@@ -17,12 +17,20 @@ public class GameManager : MonoBehaviour
     int playerCurrentHp;
     int playerCurrentO2;
     int currentMoney = 10000;
-
+    float[] reductCoolDown = new float[5]
+    {
+        .5f,
+        .8f,
+        1f,
+        1.5f,
+        2f
+    };
     public List<IStorable> Inventory = new List<IStorable>();
     public int MaxStroableItemCount = 4;
     public int MaxStroableItemWeight = 200;
     public int PlayerAttack = 1;
     public List<bool>[] TreasureIsFind;
+    Coroutine OxygenReduce;
     public int PlayerCurrentHp
     {
         get { return playerCurrentHp; }
@@ -82,10 +90,15 @@ public class GameManager : MonoBehaviour
         set 
         {
             if (currentScene == Define.Scenes.Lobby && value == Define.Scenes.Stage1)
+            {
+                currentScene = value;
                 GameStart();
+            }
             else if (currentScene == Define.Scenes.Stage1 && value == Define.Scenes.Lobby)
+            {
+                currentScene = value;
                 RoundOver();
-            currentScene = value;
+            }
             SceneManager.LoadSceneAsync((int)currentScene);
         }
     }
@@ -170,6 +183,7 @@ public class GameManager : MonoBehaviour
                 TreasureIsFind[i].Add(tFind);
             }
         }
+        OxygenReduce = StartCoroutine(O2Reduce());
     }
     public void GameOver()
     {
@@ -189,6 +203,9 @@ public class GameManager : MonoBehaviour
                 Destroy(t.gameObject);
             }
         }
+        if (OxygenReduce != null)
+            StartCoroutine(O2Reduce());
+        OxygenReduce = null;
     }
     public void RoundOver()
     {
@@ -200,6 +217,18 @@ public class GameManager : MonoBehaviour
                 DataManager.Instance.isTreasureFind[i].Add(tFind);
                 Debug.Log($"{i}, {tFind}");
             }
+        }
+        if (OxygenReduce != null)
+            StartCoroutine(O2Reduce());
+        OxygenReduce = null;
+    }
+    IEnumerator O2Reduce()
+    {
+        PlayerCurrentO2 = PlayerCurrentO2;
+        while (true)
+        {
+            yield return new WaitForSeconds(1 / reductCoolDown[(int)CurrentScene - 1]);
+            PlayerCurrentO2--;
         }
     }
 }

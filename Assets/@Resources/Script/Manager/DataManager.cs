@@ -39,7 +39,7 @@ public class DataManager
         new List<bool>(),
     };
     public List<int> Ranking = new List<int>();
-
+    public bool[] PuzzleSolve = new bool[5];
     public void Add(int score)
     {
         Ranking.Add(score);
