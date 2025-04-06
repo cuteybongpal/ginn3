@@ -22,10 +22,15 @@ public class UI_ProductInfo : MonoBehaviour
         ProductSprite.sprite = ProductManager.Instance.ProductSprites[productNum];
         Buy.onClick.RemoveAllListeners();
         Buy.GetComponentInChildren<Text>().text = $"{ProductManager.Instance.Prices[productNum]}";
+        if (ProductManager.Instance.Lvs[productNum] >= ProductManager.Instance.MaxLvs[productNum])
+        {
+            Buy.GetComponent<Image>().color = Color.gray;
+            Buy.GetComponentInChildren<Text>().text = "구매 불가";
+        }
         Buy.onClick.AddListener(() =>
         {
-            ProductManager.Instance.UpGrade(productNum);
-            Refresh();
+            if (ProductManager.Instance.UpGrade(productNum))
+                Refresh();
         });
     }
 }

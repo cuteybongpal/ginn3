@@ -1,5 +1,8 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.IO;
+using System.Xml.Serialization;
 using UnityEngine;
 
 public class DataManager 
@@ -35,4 +38,56 @@ public class DataManager
         },
         new List<bool>(),
     };
+    public List<int> Ranking = new List<int>();
+
+    public void Add(int score)
+    {
+        Ranking.Add(score);
+
+        XmlSerializer serializer = new XmlSerializer(typeof(List<int>));
+
+
+#if UNITY_EDITOR
+        using (StreamWriter sw = new StreamWriter("Assets/@Resources/Data/ranking.xml"))
+        {
+            serializer.Serialize(sw, Ranking);
+        }
+        return;
+#endif
+        using (StreamWriter sw = new StreamWriter(Application.streamingAssetsPath+"/Data/ranking.xml"))
+        {
+            serializer.Serialize(sw, Ranking);
+        }
+    }
+    public void Init()
+    {
+        XmlSerializer serializer = new XmlSerializer(typeof(List<int>));
+
+#if UNITY_EDITOR
+
+        try
+        {
+            using (StreamReader sw = new StreamReader("Assets/@Resources/Data/ranking.xml"))
+            {
+                Ranking = (List<int>)serializer.Deserialize(sw);
+            }
+        }
+        catch (Exception e)
+        {
+            Ranking = new List<int>();
+        }
+        return;
+#endif
+        try
+        {
+            using (StreamReader sw = new StreamReader(Application.streamingAssetsPath + "/Data/ranking.xml"))
+            {
+                Ranking = (List<int>)serializer.Deserialize(sw);
+            }
+        }
+        catch (Exception e)
+        {
+            Ranking = new List<int>();
+        }
+    }
 }

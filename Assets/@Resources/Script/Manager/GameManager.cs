@@ -13,9 +13,10 @@ public class GameManager : MonoBehaviour
     public float PlayerOriginSpeed;
     public int PlayerMaxHp;
     public int PlayerMaxO2;
+    public int Score = 1000;
     int playerCurrentHp;
     int playerCurrentO2;
-    int currentMoney;
+    int currentMoney = 10000;
 
     public List<IStorable> Inventory = new List<IStorable>();
     public int MaxStroableItemCount = 4;

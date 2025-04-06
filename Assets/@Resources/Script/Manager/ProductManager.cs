@@ -35,6 +35,8 @@ public class ProductManager : MonoBehaviour
             Instantiate(UI_Warning).GetComponent<UI_Warning>().Init("돈이 부족해 업그레이드가 불가능합니다.");
             return false;
         }
+        if (Lvs[productNum] >= MaxLvs[productNum])
+            return false;
         GameManager.Instance.CurrentMoney -= Prices[productNum];
         switch(productNum)
         {
@@ -54,6 +56,7 @@ public class ProductManager : MonoBehaviour
         }
         if (Prices[productNum] <= 500)
             Prices[productNum] = 0;
+         Lvs[productNum]++;
         return true;
     }
 
